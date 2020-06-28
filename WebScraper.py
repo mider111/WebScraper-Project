@@ -63,7 +63,7 @@ categories = {
 
 print("Welcome to the news analyzer".title().strip())
 pprint(categories)
-category = input_validator("Which category would you like to analyze (1-8):")
+category = input_validator("Which category would you like to read about (1-8):")
 print("You picked the topic " + categories[category])
 print("Please wait for the program to crawl the web!")
 # time.sleep(3)
