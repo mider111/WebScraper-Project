@@ -1,4 +1,5 @@
 import urllib.request
+from docx import Document
 from bs4 import BeautifulSoup
 import requests
 from pprint import pprint
@@ -40,9 +41,20 @@ class Scanner:
         for n_link in news_links:
             link = n_link.find('a')['href']
             links_list.append((n_link.text.strip()))
-            links_list.append(f"Read here: {link}")
+            links_list.append(f"Read here: https://news.google.com{link}")
 
         return links_list
+
+
+def results_docx(arr):
+
+    mydoc = Document()
+
+    for i in range(0, len(arr) - 1, 2):
+        mydoc.add_heading(arr[i], 1)
+        mydoc.add_paragraph(arr[i + 1])
+
+    mydoc.save('results.docx')
 
 
 def category_picker(topic):
@@ -92,7 +104,6 @@ print("You picked the topic " + categories[category])
 print("Please wait for the program to crawl the web!")
 # time.sleep(3)
 myScanner = Scanner(category_picker(category))
-pprint(myScanner.scanner())
+# pprint(myScanner.scanner())
 user_keyword = input("A keyword you want links for:")
-pprint(myScanner.keyword_search(user_keyword))
-
+results_docx(myScanner.keyword_search(user_keyword))
