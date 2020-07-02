@@ -61,13 +61,20 @@ class Scanner:
 
         headlines_list = []
 
-        stop_words = set(nltk.corpus.stopwords.words('english'))
+        stop_words = nltk.corpus.stopwords.words('english')
 
         for n_link in news_links:
             headlines_list.append(nltk.word_tokenize(n_link.text.strip()))
 
-        filtered_list = [w.lower() for sublist in headlines_list for w in sublist if w not in stop_words]
-        return Counter(filtered_list).most_common(25)
+        filtered_list = [w.lower() for sublist in headlines_list for w in sublist]
+
+        black_list = [".", ",", ":", "\"", "!", "?", "\'", "*", "'s", "the"] + stop_words
+
+        for word in filtered_list:
+            if word in black_list:
+                filtered_list.remove(word)
+
+        return Counter(filtered_list).most_common(10)
 
 
 def results_docx(arr):
@@ -121,14 +128,20 @@ categories = {
     10: "Health",
 }
 
-print("Welcome to the news analyzer".title().strip())
-pprint(categories)
-category = input_validator("Which category would you like to read about (1-8):")
-print("You picked the topic " + categories[category])
-print("Please wait for the program to crawl the web!")
-# time.sleep(3)
-myScanner = Scanner(category_picker(category))
-# pprint(myScanner.scanner())
-#user_keyword = input("A keyword you want links for:")
-#results_docx(myScanner.keyword_search(user_keyword))
-print(myScanner.most_common_words())
+
+def main():
+    print("Welcome to the news analyzer".title().strip())
+    pprint(categories)
+    category = input_validator("Which category would you like to read about (1-8):")
+    print("You picked the topic " + categories[category])
+    print("Please wait for the program to crawl the web!")
+    # time.sleep(3)
+    my_scanner = Scanner(category_picker(category))
+    # pprint(myScanner.scanner())
+    #user_keyword = input("A keyword you want links for:")
+    #results_docx(my_scanner.keyword_search(user_keyword))
+    print(my_scanner.most_common_words())
+
+
+if __name__ == "__main__":
+    main()
