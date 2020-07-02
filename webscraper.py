@@ -74,7 +74,7 @@ class Scanner:
             if word in black_list:
                 filtered_list.remove(word)
 
-        return Counter(filtered_list).most_common(10)
+        return Counter(filtered_list).most_common(15)
 
 
 def results_docx(arr):
@@ -115,32 +115,33 @@ def input_validator(prompt):
     return int(value)
 
 
-categories = {
-    1: "Top Stories",
-    2: "Country(Users own country)",
-    3: "World",
-    4: "Your Local News",
-    5: "Business",
-    6: "Technology",
-    7: "Entertainment",
-    8: "Sports",
-    9: "Science",
-    10: "Health",
-}
-
-
 def main():
-    print("Welcome to the news analyzer".title().strip())
+
+    categories = {
+        1: "Top Stories",
+        2: "Country(Users own country)",
+        3: "World",
+        4: "Your Local News",
+        5: "Business",
+        6: "Technology",
+        7: "Entertainment",
+        8: "Sports",
+        9: "Science",
+        10: "Health",
+    }
+
+    print("Welcome to the news analyzer \n".title().strip())
     pprint(categories)
-    category = input_validator("Which category would you like to read about (1-8):")
-    print("You picked the topic " + categories[category])
-    print("Please wait for the program to crawl the web!")
+    category = input_validator("Which category would you like to read about (1-8): \n")
+    print("You picked the topic " + categories[category] + "\n")
+    print("Please wait for the program to crawl the web! \n")
     # time.sleep(3)
     my_scanner = Scanner(category_picker(category))
     # pprint(myScanner.scanner())
-    #user_keyword = input("A keyword you want links for:")
-    #results_docx(my_scanner.keyword_search(user_keyword))
     print(my_scanner.most_common_words())
+    user_keyword = input("A keyword you want links for: \n")
+    results_docx(my_scanner.keyword_search(user_keyword))
+    print("Check your folder for the results.dock file to see the headlines and links. \n")
 
 
 if __name__ == "__main__":
