@@ -4,9 +4,15 @@ from bs4 import BeautifulSoup
 import requests
 from pprint import pprint
 import time
+import nltk
+from collections import Counter
+# Uncomment the lines below if you get an error on the first run of the program. After that you can delete it.
+# nltk.download('punkt')
+# nltk.download('stopwords')
 
 
 class Scanner:
+
     def __init__(self, url):
         self.url = url
 
@@ -44,6 +50,24 @@ class Scanner:
             links_list.append(f"Read here: https://news.google.com{link}")
 
         return links_list
+
+    def most_common_words(self):
+
+        page = requests.get(self.url)
+
+        soup = BeautifulSoup(page.content, 'html.parser')
+
+        news_links = soup.find_all('h3')
+
+        headlines_list = []
+
+        stop_words = set(nltk.corpus.stopwords.words('english'))
+
+        for n_link in news_links:
+            headlines_list.append(nltk.word_tokenize(n_link.text.strip()))
+
+        filtered_list = [w.lower() for sublist in headlines_list for w in sublist if w not in stop_words]
+        return Counter(filtered_list).most_common(25)
 
 
 def results_docx(arr):
@@ -105,5 +129,6 @@ print("Please wait for the program to crawl the web!")
 # time.sleep(3)
 myScanner = Scanner(category_picker(category))
 # pprint(myScanner.scanner())
-user_keyword = input("A keyword you want links for:")
-results_docx(myScanner.keyword_search(user_keyword))
+#user_keyword = input("A keyword you want links for:")
+#results_docx(myScanner.keyword_search(user_keyword))
+print(myScanner.most_common_words())
