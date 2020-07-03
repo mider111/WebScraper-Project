@@ -8,3 +8,5 @@ Prints out a list of the 15 most commonly used words in the titles of the latest
 Outputs the results and links for the keyword you searched for to a docx (Microsoft Word) file in the same directory as the program.
 
 Usage instructions: This program can be started from the console or terminal using python3 webscraper.py
+
+Notes: If you get an error uncomment the 2 lines of code under the imports.
