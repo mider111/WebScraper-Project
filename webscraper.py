@@ -68,7 +68,7 @@ class Scanner:
 
         filtered_list = [w.lower() for sublist in headlines_list for w in sublist]
 
-        black_list = [".", ",", ":", "\"", "!", "?", "\'", "*", "'s", "the"] + stop_words
+        black_list = [".", ",", ":", "\"", "!", "?", "\'", "*", "'s", "'s", "the", '-', 'the', '’', '‘', "n't"] + stop_words
 
         for word in filtered_list:
             if word in black_list:
@@ -130,18 +130,19 @@ def main():
         10: "Health",
     }
 
-    print("Welcome to the news analyzer \n".title().strip())
+    print("Welcome to the news analyzer".title().strip() + '\n')
     pprint(categories)
-    category = input_validator("Which category would you like to read about (1-8): \n")
+    print("\n")
+    category = input_validator("Which category would you like to read about (1-10): ")
     print("You picked the topic " + categories[category] + "\n")
     print("Please wait for the program to crawl the web! \n")
     # time.sleep(3)
     my_scanner = Scanner(category_picker(category))
     # pprint(myScanner.scanner())
     print(my_scanner.most_common_words())
-    user_keyword = input("A keyword you want links for: \n")
+    user_keyword = input("A keyword you want links for: ")
     results_docx(my_scanner.keyword_search(user_keyword))
-    print("Check your folder for the results.dock file to see the headlines and links. \n")
+    print("Check your folder for the results.dock file to see the headlines and links.")
 
 
 if __name__ == "__main__":
