@@ -1,22 +1,48 @@
 import urllib.request
+import time
 from docx import Document
 from bs4 import BeautifulSoup
 import requests
 from pprint import pprint
-import time
 import nltk
+from typing import List, Any, Tuple
 from collections import Counter
-# Uncomment the lines below if you get an error on the first run of the program. After that you can delete it.
+
+
+# Uncomment the lines below if you get an error
+# on the first run of the program.
+# After that you can delete them or comment them again.
 # nltk.download('punkt')
 # nltk.download('stopwords')
 
 
 class Scanner:
+    """A class used to represent the Web Scanner
+
+    Attributes
+    ----------
+    url: str
+        A string representing the url of the website to be scanned
+
+    Methods
+    -------
+    scanner()
+        Scans Google News using the url of the class instance.
+        Returns a list with all the headlines of the news.
+    keyword_search(keyword)
+        Scans Google News using a keyword to filter the results.
+        Returns a List with headlines and links of the news
+        containing the keyword.
+    most_common_words()
+        Scans Google News and return a List of Tuples with
+        a word and an integer representing how many times the
+        word has been found in the headlines of the news.
+    """
 
     def __init__(self, url):
         self.url = url
 
-    def scanner(self):
+    def scanner(self) -> List[str]:
         titles = []
 
         page = requests.get(self.url)
@@ -34,7 +60,7 @@ class Scanner:
 
         return titles
 
-    def keyword_search(self, keyword):
+    def keyword_search(self, keyword: Any) -> List[str]:
 
         page = requests.get(self.url)
 
@@ -51,7 +77,7 @@ class Scanner:
 
         return links_list
 
-    def most_common_words(self):
+    def most_common_words(self) -> List[Tuple[str, int]]:
 
         page = requests.get(self.url)
 
@@ -68,7 +94,8 @@ class Scanner:
 
         filtered_list = [w.lower() for sublist in headlines_list for w in sublist]
 
-        black_list = [".", ",", ":", "\"", "!", "?", "\'", "*", "'s", "'s", "the", '-', 'the', '’', '‘', "n't"] + stop_words
+        black_list = [".", ",", ":", "\"", "!", "?", "\'", "*", "'s", "'s", "the", '-', 'the', '’', '‘',
+                      "n't"] + stop_words
 
         for word in filtered_list:
             if word in black_list:
@@ -77,7 +104,15 @@ class Scanner:
         return Counter(filtered_list).most_common(15)
 
 
-def results_docx(arr):
+def results_docx(arr: List[str]) -> None:
+    """Gets a List of strings from the keyword_search()
+    method and creates a .docx file containing the news
+    headlines and links.
+    Parameters
+    ----------
+    arr: List[str]
+        The list with the headlines and links
+    """
 
     mydoc = Document()
 
@@ -88,7 +123,20 @@ def results_docx(arr):
     mydoc.save('results.docx')
 
 
-def category_picker(topic):
+def category_picker(topic: int) -> str:
+    """Provided an integer from 1-10 returns
+    the link to the category picked by the user.
+
+    Parameters
+    ----------
+    topic: int
+        The number of the topic.
+
+    Returns
+    -------
+    str
+        A string containing the link
+    """
     switcher = {
         1: 'https://news.google.com/topstories',
         2: 'https://news.google.com/topics/CAAqIggKIhxDQkFTRHdvSkwyMHZNR1F3TmpCbkVnSmxiaWdBUAE',
@@ -104,11 +152,25 @@ def category_picker(topic):
     return switcher.get(topic, "Wrong topic!")
 
 
-def input_validator(prompt):
+def input_validator(prompt: Any) -> int:
+    """Validates the input from the user to be
+    an int from 1-10.
+
+    Parameters
+    ----------
+    prompt: str
+        Asks the user for an input
+
+    Returns
+    -------
+    int
+        An integer representing the topic, which the user picked
+    """
+
     while True:
         value = input(prompt)
         if value not in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10'):
-            print("Sorry, your input is not from 1 to 8. Pick again:")
+            print("Sorry, your input is not from 1 to 10. Pick again:")
             continue
         else:
             break
@@ -116,7 +178,6 @@ def input_validator(prompt):
 
 
 def main():
-
     categories = {
         1: "Top Stories",
         2: "Country(Users own country)",
