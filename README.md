@@ -9,4 +9,5 @@ Outputs the results and links for the keyword you searched for to a docx (Micros
 
 Usage instructions: This program can be started from the console or terminal using python3 webscraper.py
 
-Notes: If you get an error uncomment the 2 lines of code under the imports.
+Notes: If you get an error uncomment the 2 lines of code under the imports. Those will download the necessary .txt files.
+
